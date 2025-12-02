@@ -1,2 +1,2 @@
 # Evacuate
-A shared library of notes, tools, images, audio, and webpage mockups for the EVACUATE! project.
+A shared library of notes, tools, images, audio, and webpage mockups for the Evacuate project.
