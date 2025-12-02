@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVACUATE | System Bezpieczeństwa Kryzysowego</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Impact&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            /* Light Theme Variables */
+            --light-bg: #FFFFFF;
+            --light-text: #000000;
+            --light-primary: #FFD600;
+            --light-secondary: #333333;
+            --light-card: #F8F9FA;
+            --light-border: #000000;
+            --light-accent: #D32F2F;
+            
+            /* Dark Theme Variables */
+            --dark-bg: #000000;
+            --dark-text: #FFD600;
+            --dark-primary: #FFD600;
+            --dark-secondary: #222222;
+            --dark-card: #111111;
+            --dark-border: #FFD600;
+            --dark-accent: #FF5252;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            background-color: var(--light-bg);
+            color: var(--light-text);
+        }
+        
+        body.dark-theme {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+        
+        /* Header & Navigation */
+        header {
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--light-primary);
+            background-color: var(--light-bg);
+        }
+        
+        body.dark-theme header {
+            border-bottom-color: var(--dark-primary);
+            background-color: var(--dark-bg);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--light-primary);
+        }
+        
+        body.dark-theme .logo-icon {
+            color: var(--dark-primary);
+        }
+        
+        .logo-text {
+            font-family: 'Impact', sans-serif;
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--light-text);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        body.dark-theme nav a {
+            color: var(--dark-text);
+        }
+        
+        nav a:hover {
+            background-color: var(--light-primary);
+            color: var(--light-bg);
+        }
+        
+        body.dark-theme nav a:hover {
+            background-color: var(--dark-primary);
+            color: var(--dark-bg);
+        }
+        
+        .theme-toggle {
+            background: var(--light-primary);
+            border: 2px solid var(--light-border);
+            color: var(--light-text);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 4rem 2rem;
+            text-align: center;
+            background: linear-gradient(rgba(255, 214, 0, 0.1), rgba(255, 214, 0, 0.05));
+            border-bottom: 4px solid var(--light-primary);
+        }
+        
+        body.dark-theme .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9));
+        }
+        
+        .hero h1 {
+            font-family: 'Impact', sans-serif;
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            color: var(--light-text);
+        }
+        
+        body.dark-theme .hero h1 {
+            color: var(--dark-text);
+            text-shadow: 0 0 10px rgba(255, 214, 0, 0.5);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--light-primary);
+        }
+        
+        body.dark-theme .stat-number {
+            color: var(--dark-primary);
+        }
+        
+        /* Sections */
+        section {
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            font-family: 'Impact', sans-serif;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--light-primary);
+        }
+        
+        body.dark-theme .section-title {
+            border-bottom-color: var(--dark-primary);
+        }
+        
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-card {
+            background: var(--light-card);
+            border: 3px solid var(--light-border);
+            border-radius: 8px;
+            padding: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        body.dark-theme .feature-card {
+            background: var(--dark-card);
+            border-color: var(--dark-border);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--light-primary);
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--light-text);
+        }
+        
+        body.dark-theme .feature-title {
+            color: var(--dark-text);
+        }
+        
+        /* Interactive Elements */
+        .interactive-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .panel {
+            background: var(--light-card);
+            border: 3px solid var(--light-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+        
+        body.dark-theme .panel {
+            background: var(--dark-card);
+            border-color: var(--dark-border);
+        }
+        
+        .panel-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--light-primary);
+        }
+        
+        /* SOS Code Generator */
+        .sos-generator {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        #sos-code {
+            font-family: monospace;
+            font-size: 1.2rem;
+            padding: 1rem;
+            background: var(--light-bg);
+            border: 2px solid var(--light-border);
+            border-radius: 4px;
+            text-align: center;
+            margin: 1rem 0;
+        }
+        
+        body.dark-theme #sos-code {
+            background: var(--dark-card);
+            border-color: var(--dark-border);
+        }
+        
+        .btn {
+            background: var(--light-primary);
+            color: var(--light-text);
+            border: 2px solid var(--light-border);
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Download Section */
+        .downloads {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .download-card {
+            background: var(--light-card);
+            border: 2px solid var(--light-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        body.dark-theme .download-card {
+            background: var(--dark-card);
+            border-color: var(--dark-border);
+        }
+        
+        .download-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .download-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--light-primary);
+        }
+        
+        /* Map Container */
+        .map-container {
+            height: 400px;
+            background: var(--light-card);
+            border: 3px solid var(--light-border);
+            border-radius: 8px;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        body.dark-theme .map-container {
+            background: var(--dark-card);
+            border-color: var(--dark-border);
+        }
+        
+        .map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        /* Chart Container */
+        .chart-container {
+            height: 300px;
+            margin: 2rem 0;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            background: var(--light-secondary);
+            color: white;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        body.dark-theme footer {
+            background: var(--dark-secondary);
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .interactive-panel {
+                grid-template-columns: 1fr;
+            }
+            
+            section {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <div class="logo-icon">🚨</div>
+            <div class="logo-text">EWAKUACJA!</div>
+        </div>
+        
+        <nav>
+            <ul>
+                <li><a href="#about">O projekcie</a></li>
+                <li><a href="#features">Funkcje</a></li>
+                <li><a href="#data">Dane</a></li>
+                <li><a href="#download">Pobierz</a></li>
+                <li><a href="#contact">Kontakt</a></li>
+            </ul>
+        </nav>
+        
+        <button class="theme-toggle" id="themeToggle">
+            <i class="fas fa-moon"></i> Tryb ciemny
+        </button>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>BEZPIECZEŃSTWO KRYZYSOWE OFFLINE</h1>
+        <p class="hero-subtitle">EVACUATE to zdecentralizowany system nawigacji i komunikacji w sytuacjach awaryjnych. Działa bez internetu, wykorzystuje sztuczną inteligencję i sieci P2P.</p>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">15</div>
+                <div>zweryfikowanych schronisk</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">3</div>
+                <div>wykryte przypadki kryzysowe</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">90%</div>
+                <div>wzrost zaufania ochotników</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">2</div>
+                <div>aktywacje systemu SOS</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- About Section -->
+    <section id="about">
+        <h2 class="section-title">O PROJEKCIE</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-broadcast-tower"></i></div>
+                <h3 class="feature-title">Działa bez internetu</h3>
+                <p>Mapy MBTiles, nawigacja AI, komunikacja mesh. System funkcjonuje gdy tradycyjna infrastruktura zawodzi.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3 class="feature-title">Szyfrowanie end-to-end</h3>
+                <p>AES-256, sieci P2P (ZeroTier, Bridgefy), miesięcznie rotowane kody kryzysowe dla ochrony użytkowników.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-users"></i></div>
+                <h3 class="feature-title">Napędzane przez społeczność</h3>
+                <p>Ochotnicy weryfikują dane przez OpenStreetMap i GitHub Issues. Gamifikacja zwiększa zaangażowanie.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Interactive Tools Section -->
+    <section id="tools">
+        <h2 class="section-title">NARZĘDZIA INTERAKTYWNE</h2>
+        
+        <div class="interactive-panel">
+            <!-- SOS Code Generator -->
+            <div class="panel">
+                <h3 class="panel-title">Generator kodów SOS</h3>
+                <div class="sos-generator">
+                    <p>Wygeneruj bezpieczny, tymczasowy kod SOS dla sytuacji kryzysowej:</p>
+                    <div id="sos-code">Kliknij "Generuj kod"</div>
+                    <div class="btn" onclick="generateSOSCode()">Generuj kod SOS</div>
+                    <div class="btn" onclick="copySOSCode()">Kopiuj do schowka</div>
+                    <p><small>Kody zmieniają się co miesiąc. Ten kod wygaśnie: <span id="expiry-date">--/--/----</span></small></p>
+                </div>
+            </div>
+            
+            <!-- Crisis Simulator -->
+            <div class="panel">
+                <h3 class="panel-title">Symulator sytuacji kryzysowej</h3>
+                <div id="crisis-simulator">
+                    <p>Wybierz typ kryzysu do symulacji:</p>
+                    <select id="crisis-type" class="btn" style="width:100%; margin-bottom:1rem;">
+                        <option value="flood">Powódź</option>
+                        <option value="fire">Pożar</option>
+                        <option value="radiation">Awaria nuklearna</option>
+                        <option value="earthquake">Trzęsienie ziemi</option>
+                    </select>
+                    <div class="btn" onclick="runCrisisSimulation()">Uruchom symulację</div>
+                    <div id="simulation-result" style="margin-top:1rem; padding:1rem; background:rgba(0,0,0,0.1); border-radius:4px;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Map Container -->
+        <div class="map-container">
+            <div class="map-overlay">
+                <div>
+                    <h3>Mapa schronisk w Szczecinie (pilotaż)</h3>
+                    <p>15 zweryfikowanych schronisk podziemnych</p>
+                    <div class="btn" style="margin-top:1rem;">Pobierz dane GIS</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Data Visualization -->
+    <section id="data">
+        <h2 class="section-title">DANE PILOTAŻOWE</h2>
+        
+        <div class="chart-container">
+            <canvas id="pilotChart"></canvas>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3 class="feature-title">Dane z czujników IoT</h3>
+                <p>ESP32/Arduino monitorują poziom wody, promieniowanie, jakość powietrza.</p>
+                <div class="btn" style="margin-top:1rem;">Pobierz dane CSV</div>
+            </div>
+            
+            <div class="feature-card">
+                <h3 class="feature-title">Analiza AI</h3>
+                <p>Modele Qwen analizują dane w czasie rzeczywistym, przewidując rozwój sytuacji.</p>
+                <div class="btn" style="margin-top:1rem;">Zobacz raport AI</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Download Section -->
+    <section id="download">
+        <h2 class="section-title">MATERIAŁY DO POBRANIA</h2>
+        
+        <div class="downloads">
+            <div class="download-card">
+                <div class="download-icon"><i class="fas fa-file-pdf"></i></div>
+                <h3>Dokumentacja projektu</h3>
+                <p>Pełna dokumentacja techniczna (PDF, 45 stron)</p>
+                <div class="btn" style="margin-top:1rem;">Pobierz PDF</div>
+            </div>
+            
+            <div class="download-card">
+                <div class="download-icon"><i class="fas fa-code"></i></div>
+                <h3>Kod źródłowy</h3>
+                <p>Repozytorium GitHub z kodem open-source</p>
+                <div class="btn" style="margin-top:1rem;">Przejdź do GitHub</div>
+            </div>
+            
+            <div class="download-card">
+                <div class="download-icon"><i class="fas fa-map-marked-alt"></i></div>
+                <h3>Mapy MBTiles</h3>
+                <p>Mapy offline dla wybranych regionów Polski</p>
+                <div class="btn" style="margin-top:1rem;">Pobierz (2.3 GB)</div>
+            </div>
+            
+            <div class="download-card">
+                <div class="download-icon"><i class="fas fa-microchip"></i></div>
+                <h3>Schematy IoT</h3>
+                <p>Projekty czujników Arduino/ESP32</p>
+                <div class="btn" style="margin-top:1rem;">Pobierz schematy</div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 2rem;">
+            <h3>API dla deweloperów</h3>
+            <p>Dokumentacja API do integracji z lokalnymi systemami</p>
+            <div class="btn">Dokumentacja API</div>
+            <div class="btn">Pobierz paczkę SDK</div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2 class="section-title">WDROŻENIE W TWOIM MIEŚCIE</h2>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3 class="feature-title">Pilotaż (2 miesiące)</h3>
+                <p>Test systemu w Twojej gminie/mieście. Bezpłatny okres pilotażowy.</p>
+                <div class="btn" style="margin-top:1rem;">Zamów pilotaż</div>
+            </div>
+            
+            <div class="feature-card">
+                <h3 class="feature-title">Szkolenia</h3>
+                <p>Szkolenia dla ochotników, straży pożarnej, służb miejskich.</p>
+                <div class="btn" style="margin-top:1rem;">Plan szkoleń</div>
+            </div>
+            
+            <div class="feature-card">
+                <h3 class="feature-title">Kontakt</h3>
+                <p>email@evacuate.pl<br>+48 123 456 789</p>
+                <div class="btn" style="margin-top:1rem;">Wyślij wiadomość</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="logo" style="justify-content: center; margin-bottom: 2rem;">
+            <div class="logo-icon">🚨</div>
+            <div class="logo-text">EWAKUACJA!</div>
+        </div>
+        
+        <p>Open-source system bezpieczeństwa kryzysowego</p>
+        
+        <div class="footer-links">
+            <a href="#"><i class="fab fa-github"></i> GitHub</a>
+            <a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+            <a href="#"><i class="fas fa-file-contract"></i> Dokumentacja</a>
+        </div>
+        
+        <div style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.8;">
+            <p>© 2025 Projekt EVACUATE. Licencja MIT. Współfinansowane przez społeczność open-source.</p>
+            <p>GDPR compliant | Dostępność WCAG 2.1 AA | ISO 22301:2019</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const moonIcon = themeToggle.querySelector('.fa-moon');
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-theme');
+            body.classList.toggle('light-theme');
+            
+            if (body.classList.contains('dark-theme')) {
+                moonIcon.classList.remove('fa-moon');
+                moonIcon.classList.add('fa-sun');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i> Tryb jasny';
+            } else {
+                moonIcon.classList.remove('fa-sun');
+                moonIcon.classList.add('fa-moon');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i> Tryb ciemny';
+            }
+        });
+        
+        // SOS Code Generator
+        function generateSOSCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = '';
+            for (let i = 0; i < 8; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+                if (i === 3) code += '-';
+            }
+            document.getElementById('sos-code').textContent = code;
+            
+            // Set expiry date (1 month from now)
+            const expiryDate = new Date();
+            expiryDate.setMonth(expiryDate.getMonth() + 1);
+            document.getElementById('expiry-date').textContent = 
+                expiryDate.toLocaleDateString('pl-PL');
+        }
+        
+        function copySOSCode() {
+            const code = document.getElementById('sos-code').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Kod skopiowany do schowka: ' + code);
+            });
+        }
+        
+        // Crisis Simulator
+        function runCrisisSimulation() {
+            const crisisType = document.getElementById('crisis-type').value;
+            const results = {
+                flood: {
+                    title: "Symulacja: POWÓDŹ",
+                    actions: [
+                        "✅ Aktywowano czujniki wody (ESP32)",
+                        "✅ Zaktualizowano mapy stref zalewowych",
+                        "✅ Wyznaczono 3 bezpieczne trasy ewakuacji",
+                        "✅ Powiadomiono 5 najbliższych schronisk",
+                        "✅ Wysłano alert SMS do 250 mieszkańców"
+                    ],
+                    shelters: 8,
+                    time: "12 minut"
+                },
+                fire: {
+                    title: "Symulacja: POŻAR",
+                    actions: [
+                        "✅ Wykryto pożar przez YOLOv8 AI",
+                        "✅ Wyznaczono strefę bezpieczną (2 km)",
+                        "✅ Przekierowano ruch uliczny",
+                        "✅ Aktywowano system wentylacji schronów",
+                        "✅ Powiadomiono straż pożarną"
+                    ],
+                    shelters: 4,
+                    time: "8 minut"
+                },
+                radiation: {
+                    title: "Symulacja: AWARIA NUKLEARNA",
+                    actions: [
+                        "✅ Obliczono rozkład promieniowania",
+                        "✅ Wyznaczono strefy bezpieczne",
+                        "✅ Aktywowano filtry powietrza",
+                        "✅ Rozdano zalecenia dotyczące jodku potasu",
+                        "✅ Uruchomiono komunikację przez sieci mesh"
+                    ],
+                    shelters: 12,
+                    time: "15 minut"
+                },
+                earthquake: {
+                    title: "Symulacja: TRZĘSIENIE ZIEMI",
+                    actions: [
+                        "✅ Wykryto wstrząsy przez czujniki sejsmiczne",
+                        "✅ Zidentyfikowano uszkodzone budynki",
+                        "✅ Wyznaczono punkty zbiórki",
+                        "✅ Aktywowano system lokalizacji użytkowników",
+                        "✅ Uruchomiono komunikację satelitarną"
+                    ],
+                    shelters: 6,
+                    time: "10 minut"
+                }
+            };
+            
+            const result = results[crisisType];
+            let html = `<h4>${result.title}</h4>`;
+            html += `<p>Czas reakcji systemu: <strong>${result.time}</strong></p>`;
+            html += `<p>Dostępnych schronisk: <strong>${result.shelters}</strong></p>`;
+            html += "<ul>";
+            result.actions.forEach(action => {
+                html += `<li>${action}</li>`;
+            });
+            html += "</ul>";
+            
+            document.getElementById('simulation-result').innerHTML = html;
+        }
+        
+        // Chart.js Data Visualization
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('pilotChart').getContext('2d');
+            const pilotChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec'],
+                    datasets: [{
+                        label: 'Aktywacje systemu SOS',
+                        data: [2, 3, 1, 5, 4, 7],
+                        backgroundColor: '#FFD600',
+                        borderColor: '#000000',
+                        borderWidth: 2
+                    }, {
+                        label: 'Zwer. schroniska',
+                        data: [5, 8, 12, 15, 18, 22],
+                        backgroundColor: '#D32F2F',
+                        borderColor: '#000000',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: body.classList.contains('dark-theme') ? '#FFD600' : '#000000'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: body.classList.contains('dark-theme') ? '#FFD600' : '#000000'
+                            },
+                            grid: {
+                                color: body.classList.contains('dark-theme') ? 'rgba(255, 214, 0, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: body.classList.contains('dark-theme') ? '#FFD600' : '#000000'
+                            },
+                            grid: {
+                                color: body.classList.contains('dark-theme') ? 'rgba(255, 214, 0, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Generate initial SOS code
+            generateSOSCode();
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

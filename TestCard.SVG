@@ -1,0 +1,29 @@
+<!-- SVG szablon frontu karty EWAKUACJA! -->
+<svg xmlns="http://www.w3.org/2000/svg" width="630" height="880" viewBox="0 0 630 880">
+  <!-- Tło -->
+  <rect width="100%" height="100%" fill="#000000"/>
+  <!-- Ramka -->
+  <rect x="8" y="8" width="614" height="864" fill="none" stroke="#FFD400" stroke-width="6"/>
+  <!-- Lewy górny: ALARM -->
+  <text x="28" y="60" fill="#FFD400" font-family="Orbitron, sans-serif" font-size="36" font-weight="700">⚠ ALARM</text>
+  <!-- Prawy górny: Typ zagrożenia -->
+  <text x="470" y="60" fill="#FFD400" font-family="Orbitron, sans-serif" font-size="28" text-anchor="end">☢ Typ zagrożenia</text>
+  <!-- Centralna ilustracja: placeholder -->
+  <!-- Replace this group with an SVG icon or image (bobblehead, flame, wave, etc.) -->
+  <g id="illustration" transform="translate(115,110)">
+    <rect x="0" y="0" width="400" height="360" rx="20" fill="#0a0a0a" stroke="#FFD400" stroke-width="4"/>
+    <text x="200" y="190" fill="#FFD400" font-family="Orbitron, sans-serif" font-size="20" text-anchor="middle">[ILUSTRACJA]</text>
+  </g>
+  <!-- Sekcja DZIAŁANIE -->
+  <rect x="28" y="500" width="574" height="300" rx="12" fill="#0a0a0a" stroke="#FFD400" stroke-width="3"/>
+  <text x="48" y="540" fill="#FFD400" font-family="Orbitron, sans-serif" font-size="26" font-weight="700">DZIAŁANIE:</text>
+  <text x="48" y="580" fill="#FFD400" font-family="Roboto, sans-serif" font-size="20">
+    <tspan x="48" dy="0">I. Schowaj się pod ziemią (piwnica/schron).</tspan>
+    <tspan x="48" dy="30">II. Nasłuchuj komunikatów w bezpiecznym miejscu.</tspan>
+    <tspan x="48" dy="30">III. Wyjdź dopiero po oficjalnym zakończeniu zagrożenia.</tspan>
+  </text>
+  <!-- Pionowy marker rangi (prawe krawędzie) -->
+  <text transform="rotate(90 600,120)" x="600" y="120" fill="#FFD400" font-family="Orbitron, sans-serif" font-size="28">☢☢</text>
+  <!-- Miejsce na logo (komentarz: zamień '☣' na wektor logo) -->
+  <text x="315" y="840" fill="#FFD400" font-family="Orbitron, sans-serif" font-size="18" text-anchor="middle">☣ EWAKUACJA!</text>
+</svg>
